@@ -16,19 +16,22 @@ type GinG struct {
 	KubeConfig    *rest.Config
 }
 
-func NewGinG(describe, kubeConfigPath string) GinG {
+func NewGinG(describe, kubeConfigPath string) *GinG {
 	// generate instance
-	g := GinG{Describe: describe}
+	g := &GinG{Describe: describe}
 	// client-go
 	conf, err := clientcmd.BuildConfigFromFlags("", kubeConfigPath)
 	if err != nil {
-		klog.Fatalf("[error when get kubeConfigPath]%v", err)
+		klog.Fatalf("[error when get kubeConfigPath]\n")
+		panic(err.Error())
+
 	}
 	g.KubeConfig = conf
 
 	kubeClient, err := kubernetes.NewForConfig(conf)
 	if err != nil {
-		klog.Fatalf("[error when new kubeClientSet]%v", err)
+		klog.Fatalf("[error when new kubeClientSet]\n")
+		panic(err.Error())
 	}
 	g.KubeClientSet = kubeClient
 	return g
