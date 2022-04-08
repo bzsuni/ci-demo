@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  setup-go-k8s:
+  get-cluster-info:
     runs-on: self-hosted
     steps: 
       - name: checkout code
