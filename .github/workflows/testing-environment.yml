@@ -28,3 +28,5 @@ jobs:
           echo -e "\033[35m workspace path is `pwd` \033[0m"
       - name: install basic environment tool
         run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && ./test/hack/install-basic-environment-tool.sh
+      - name: install kind and kubectl
+        run: sudo chmod +x ./test/hack/install-test-tool.sh && source ./test/hack/install-test-tool.sh
