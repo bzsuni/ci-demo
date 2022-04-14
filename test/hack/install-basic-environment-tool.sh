@@ -32,15 +32,23 @@ if ! $(which go > /dev/null 2>&1); then
 
   if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
   # set go env
-  sudo go env -w GOPROXY=https://goproxy.cn,direct
-  sudo go env -w GO111MODULE=on
+  go env -w GOPROXY=https://goproxy.cn,direct
+  go env -w GO111MODULE=on
 fi
 
 # install docker
 msg "## install docker"
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+sudo newgrp docker
+
 if ! $(which docker > /dev/null 2>&1); then
-  echo need to install go
+  sudo yum -y install docker
+  sudo systemctl start docker
+  if ! $(which docker > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
+  sudo systemctl enable docker
 fi
+
 # install git
 msg "## install git"
 if ! $(which git > /dev/null 2>&1); then
