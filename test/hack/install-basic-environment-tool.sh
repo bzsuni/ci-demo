@@ -32,9 +32,9 @@ st
   # set go env
   sudo go env -w GOPROXY=https://goproxy.cn,direct
   sudo go env -w GO111MODULE=on
-
-  if ! $(go version); then err "err install go"; exit 1; fi
 fi
+
+if ! $(go version); then err "err install go"; exit 1; fi
 
 # install docker
 msg "## install docker"
