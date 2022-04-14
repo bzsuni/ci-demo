@@ -21,3 +21,4 @@ curl -Lo "${root}/bin/kubectl" "https://storage.googleapis.com/kubernetes-releas
 chmod +x "${root}/bin/kubectl"
 
 export PATH="$PATH:$root/bin"
+echo "$PATH"
