@@ -26,7 +26,7 @@ if ! $(which go > /dev/null 2>&1); then
     sudo echo -e "export GOBIN=$HOME/go/bin" >> $HOME/.bashrc
   fi
   if ! $(cat $HOME/.bashrc | grep -w PATH | grep GOPATH > /dev/null 2>&1); then
-     echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
+     export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH
   fi
   which go
   if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
