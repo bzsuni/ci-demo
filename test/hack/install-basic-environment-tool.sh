@@ -42,16 +42,20 @@ fi
 # install docker
 msg "## install docker"
 
+msg "==== $(docker version) ====="
+
 if ! $(docker version > /dev/null 2>&1); then
   sudo yum -y install docker
   sudo systemctl start docker
   if ! $(docker version > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
   sudo systemctl enable docker
+
+  sudo groupadd docker
+  sudo gpasswd -a $USER docker
+  sudo newgrp docker
 fi
 
-sudo groupadd docker
-sudo gpasswd -a $USER docker
-sudo newgrp docker
+
 
 # install git
 msg "## install git"
