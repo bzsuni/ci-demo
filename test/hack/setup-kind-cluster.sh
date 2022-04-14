@@ -72,6 +72,7 @@ retry() {
   return $status
 }
 
+export PATH="$PATH:$ROOT/bin"
 echo "## checking requirements"
 check_requirements
 echo "## delete existing KinD cluster if it exists"
