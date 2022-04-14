@@ -42,12 +42,15 @@ fi
 # install docker
 msg "## install docker"
 
-msg "==== $(docker version) ====="
-
-if ! $(docker version > /dev/null 2>&1); then
+if ! $(which docker > /dev/null 2>&1); then
   sudo yum -y install docker
   sudo systemctl start docker
-  if ! $(docker version > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
+  if ! $(which docker > /dev/null 2>&1); then
+    err "failed install docker";
+    exit 1;
+  else
+    succ "install docker succeed"
+  fi
   sudo systemctl enable docker
 
   sudo groupadd docker
