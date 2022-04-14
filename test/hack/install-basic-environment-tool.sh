@@ -14,9 +14,8 @@ if ! $(which go > /dev/null 2>&1); then
   sudo wget "https://golang.google.cn/dl/go1.18.linux-amd64.tar.gz"
   sudo tar -C /usr/local -xzf go1.18.linux-amd64.tar.gz
   sudo rm -rf go1.18.linux-amd64.tar.gz
-  sudo go env -w GOPROXY=https://goproxy.cn,direct
-  sudo go env -w GO111MODULE=on
 
+  # add go path
   if ! $(cat $HOME/.bashrc | grep GOROOT > /dev/null 2>&1); then
     sudo echo -e "export GOROOT=/usr/local/go" >> $HOME/.bashrc
   fi
@@ -29,6 +28,11 @@ if ! $(which go > /dev/null 2>&1); then
   if ! $(cat $HOME/.bashrc | grep PATH | grep GOPATH > /dev/null 2>&1); then
     sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH'
   fi
+
+  # set go env
+  sudo go env -w GOPROXY=https://goproxy.cn,direct
+  sudo go env -w GO111MODULE=on
+
   if ! $(go version); then err "err install go"; fi
 fi
 
