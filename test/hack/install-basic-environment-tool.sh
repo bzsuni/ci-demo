@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. ./helper.sh
+source ./helper.sh
 # install go
 msg "## install go"
 if ! $(go version > /dev/null 2>&1); then
