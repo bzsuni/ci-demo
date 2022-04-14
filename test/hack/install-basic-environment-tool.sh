@@ -27,7 +27,7 @@ if ! $(which go > /dev/null 2>&1); then
   fi
   if ! $(cat $HOME/.bashrc | grep -w PATH | grep GOPATH > /dev/null 2>&1); then
      sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
-     sudo  ln -s /usr/local/go/bin/go /usr/local/bin/go
+     sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
   fi
   which go
   if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
@@ -38,9 +38,6 @@ fi
 
 # install docker
 msg "## install docker"
-sudo groupadd docker
-sudo gpasswd -a $USER docker
-sudo newgrp docker
 
 if ! $(which docker > /dev/null 2>&1); then
   sudo yum -y install docker
@@ -48,6 +45,10 @@ if ! $(which docker > /dev/null 2>&1); then
   if ! $(which docker > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
   sudo systemctl enable docker
 fi
+
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+sudo newgrp docker
 
 # install git
 msg "## install git"
