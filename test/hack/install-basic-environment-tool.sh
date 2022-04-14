@@ -66,9 +66,9 @@ fi
 needs="git nmap jq"
 for need in $needs; do
   msg "## install $need"
-  if ! $($need version > /dev/null 2>&1); then
+  if ! $($need --version > /dev/null 2>&1); then
     sudo yum -y install $need
-    if ! $($need version > /dev/null 2>&1); then
+    if ! $($need --version > /dev/null 2>&1); then
       err "failed install $need"; exit 1;
     else
       succ "install $need succeed"
