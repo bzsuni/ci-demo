@@ -8,6 +8,10 @@ function err() {
    if [[ $# -ne 1 ]]; then echo "[func err] one arg needed"; exit 1; fi
    echo -e "\033[31m $1 \033[0m"
 }
+function succ() {
+   if [[ $# -ne 1 ]]; then echo "[func succ] one arg needed"; exit 1; fi
+   echo -e "\033[32m $1 \033[0m"
+}
 # install go
 msg "## install go"
 if ! $(go version > /dev/null 2>&1); then
@@ -38,10 +42,10 @@ fi
 # install docker
 msg "## install docker"
 
-if ! $(which docker > /dev/null 2>&1); then
+if ! $(docker version > /dev/null 2>&1); then
   sudo yum -y install docker
   sudo systemctl start docker
-  if ! $(which docker > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
+  if ! $(docker version > /dev/null 2>&1); then err "failed install docker"; exit 1; fi
   sudo systemctl enable docker
 fi
 
@@ -51,6 +55,9 @@ sudo newgrp docker
 
 # install git
 msg "## install git"
-if ! $(which git > /dev/null 2>&1); then
-  echo need to install go
+if ! $(git version > /dev/null 2>&1); then
+  sudo yum -y install git
 fi
+if ! $(git version > /dev/null 2>&1); then err "failed install git"; exit 1; fi
+
+
