@@ -37,6 +37,8 @@ if ! $(go version > /dev/null 2>&1); then
   # set go env
   go env -w GOPROXY=https://goproxy.cn,direct
   go env -w GO111MODULE=on
+else
+  msg "go has already been installed"
 fi
 
 # install docker
@@ -56,15 +58,18 @@ if ! $(which docker > /dev/null 2>&1); then
   sudo groupadd docker
   sudo gpasswd -a $USER docker
   sudo newgrp docker
+else
+  msg "docker has already been installed"
 fi
 
-
-
-# install git
-msg "## install git"
-if ! $(git version > /dev/null 2>&1); then
-  sudo yum -y install git
+# install git nmap jq
+needs="git nmap jq"
+for need in needs; do
+msg "## install $need"
+if ! $($need version > /dev/null 2>&1); then
+  sudo yum -y install $need
+  if ! $($need version > /dev/null 2>&1); then err "failed install $need"; exit 1; fi
+else
+  msg "$need has already been installed"
 fi
-if ! $(git version > /dev/null 2>&1); then err "failed install git"; exit 1; fi
-
-
+done
