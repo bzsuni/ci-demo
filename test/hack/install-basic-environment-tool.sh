@@ -29,7 +29,8 @@ if ! $(which go > /dev/null 2>&1); then
     sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
     source $HOME/.bashrc
   fi
-
+  go
+  which go
   if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
   # set go env
   go env -w GOPROXY=https://goproxy.cn,direct
