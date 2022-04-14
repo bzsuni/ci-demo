@@ -30,7 +30,7 @@ if ! $(which go > /dev/null 2>&1); then
     source $HOME/.bashrc
   fi
 
-  if ! $(go version); then err "err install go"; exit 1; fi
+  if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
   # set go env
   sudo go env -w GOPROXY=https://goproxy.cn,direct
   sudo go env -w GO111MODULE=on
