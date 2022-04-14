@@ -23,12 +23,12 @@ if ! $(which go > /dev/null 2>&1); then
     sudo echo -e "export GOPATH=$HOME/go" >> $HOME/.bashrc
   fi
   if ! $(cat $HOME/.bashrc | grep GOBIN > /dev/null 2>&1); then
-    sudo echo -e "export GOBIN=$GOPATH/bin" >> $HOME/.bashrc
+    sudo echo -e "export GOBIN=$HOME/go/bin" >> $HOME/.bashrc
   fi
-  if ! $(cat $HOME/.bashrc | grep PATH | grep GOPATH > /dev/null 2>&1); then
+  if ! $(cat $HOME/.bashrc | grep -w PATH | grep GOPATH > /dev/null 2>&1); then
     sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH'
   fi
-
+st
   # set go env
   sudo go env -w GOPROXY=https://goproxy.cn,direct
   sudo go env -w GO111MODULE=on
