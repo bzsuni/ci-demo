@@ -26,14 +26,14 @@ if ! $(which go > /dev/null 2>&1); then
     sudo echo -e "export GOBIN=$HOME/go/bin" >> $HOME/.bashrc
   fi
   if ! $(cat $HOME/.bashrc | grep -w PATH | grep GOPATH > /dev/null 2>&1); then
-    sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH'
+    sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
   fi
 st
   # set go env
   sudo go env -w GOPROXY=https://goproxy.cn,direct
   sudo go env -w GO111MODULE=on
 
-  if ! $(go version); then err "err install go"; fi
+  if ! $(go version); then err "err install go"; exit 1; fi
 fi
 
 # install docker
