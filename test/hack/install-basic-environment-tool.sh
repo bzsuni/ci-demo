@@ -26,8 +26,7 @@ if ! $(which go > /dev/null 2>&1); then
     sudo echo -e "export GOBIN=$HOME/go/bin" >> $HOME/.bashrc
   fi
   if ! $(cat $HOME/.bashrc | grep -w PATH | grep GOPATH > /dev/null 2>&1); then
-    sudo echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
-    source $HOME/.bashrc
+     echo -e 'export PATH=$GOPATH:$GOBIN:$GOROOT/bin:$PATH' >> $HOME/.bashrc
   fi
   go
   which go
