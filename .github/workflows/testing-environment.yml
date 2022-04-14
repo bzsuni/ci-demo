@@ -27,4 +27,4 @@ jobs:
           echo -e "\033[35m home path is $HOME \033[0m"
           echo -e "\033[35m workspace path is `pwd` \033[0m"
       - name: install basic environment tool
-        run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && source ./test/hack/install-basic-environment-tool.sh
+        run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && ./test/hack/install-basic-environment-tool.sh
