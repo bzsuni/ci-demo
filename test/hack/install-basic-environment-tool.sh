@@ -10,7 +10,7 @@ function err() {
 }
 # install go
 msg "## install go"
-if ! $(which go > /dev/null 2>&1); then
+if ! $(go version > /dev/null 2>&1); then
   sudo wget "https://golang.google.cn/dl/go1.18.linux-amd64.tar.gz"
   sudo tar -C /usr/local -xzf go1.18.linux-amd64.tar.gz
   sudo rm -rf go1.18.linux-amd64.tar.gz
@@ -30,7 +30,7 @@ if ! $(which go > /dev/null 2>&1); then
      sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
   fi
   which go
-  if ! $(which go > /dev/null 2>&1); then err "failed install go"; exit 1; fi
+  if ! $(go version > /dev/null 2>&1); then err "failed install go"; exit 1; fi
   # set go env
   go env -w GOPROXY=https://goproxy.cn,direct
   go env -w GO111MODULE=on
