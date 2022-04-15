@@ -83,9 +83,9 @@ create_cluster
 kind export kubeconfig --name $KIND_CLUSTER_NAME
 echo "## wait for coreDNS"
 kubectl -n kube-system wait --for=condition=available deploy/coredns --timeout=$TIMEOUT_K8
-echo "## install multus"
-retry kubectl create -f "${MULTUS_DAEMONSET_URL}"
-retry kubectl -n kube-system wait --for=condition=ready -l name="multus" pod --timeout=$TIMEOUT_K8
+#echo "## install multus"
+#retry kubectl create -f "${MULTUS_DAEMONSET_URL}"
+#retry kubectl -n kube-system wait --for=condition=ready -l name="multus" pod --timeout=$TIMEOUT_K8
 echo "## install CNIs"
 retry kubectl create -f "${CNIS_DAEMONSET_URL}"
 retry kubectl -n kube-system wait --for=condition=ready -l name="cni-plugins" pod --timeout=$TIMEOUT_K8
