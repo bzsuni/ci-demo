@@ -86,9 +86,9 @@ kubectl -n kube-system wait --for=condition=available deploy/coredns --timeout=$
 #echo "## install multus"
 #retry kubectl create -f "${MULTUS_DAEMONSET_URL}"
 #retry kubectl -n kube-system wait --for=condition=ready -l name="multus" pod --timeout=$TIMEOUT_K8
-echo "## install CNIs"
-retry kubectl create -f "${CNIS_DAEMONSET_URL}"
-retry kubectl -n kube-system wait --for=condition=ready -l name="cni-plugins" pod --timeout=$TIMEOUT_K8
+#echo "## install CNIs"
+#retry kubectl create -f "${CNIS_DAEMONSET_URL}"
+#retry kubectl -n kube-system wait --for=condition=ready -l name="cni-plugins" pod --timeout=$TIMEOUT_K8
 #echo "## build whereabouts"
 #pushd "$ROOT"
 #$OCI_BIN build . -t "$IMG_NAME"
