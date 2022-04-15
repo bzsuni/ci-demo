@@ -62,6 +62,8 @@ if ! $(which docker > /dev/null 2>&1); then
 else
   msg "docker has already been installed"
 fi
+# resolve runner run docker permission denied
+sudo chmod a+rw /var/run/docker.sock
 
 # install git nmap jq
 needs="git nmap jq"
