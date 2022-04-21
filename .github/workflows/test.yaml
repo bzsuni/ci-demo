@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: self-hosted
     env:
-      NUMBER_OF_COMPUTE_NODES: 5
+      NUMBER_OF_COMPUTE_NODES: 3
     steps: 
       - name: checkout code
         uses: actions/checkout@v2.3.4

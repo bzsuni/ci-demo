@@ -86,9 +86,9 @@ kubectl -n kube-system wait --for=condition=available deploy/coredns --timeout=$
 echo "## install multus"
 retry kubectl create -f "${MULTUS_DAEMONSET_URL}"
 retry kubectl -n kube-system wait --for=condition=ready -l name="multus" pod --timeout=$TIMEOUT_K8
-#echo "## install CNIs"
-#retry kubectl create -f "${CNIS_DAEMONSET_URL}"
-#retry kubectl -n kube-system wait --for=condition=ready -l name="cni-plugins" pod --timeout=$TIMEOUT_K8
+echo "## install CNIs"
+retry kubectl create -f "${CNIS_DAEMONSET_URL}"
+retry kubectl -n kube-system wait --for=condition=ready -l name="cni-plugins" pod --timeout=$TIMEOUT_K8
 #echo "## build whereabouts"
 #pushd "$ROOT"
 #$OCI_BIN build . -t "$IMG_NAME"
@@ -99,9 +99,12 @@ retry kubectl -n kube-system wait --for=condition=ready -l name="multus" pod --t
 #"$OCI_BIN" save -o /tmp/whereabouts-img.tar "$IMG_NAME"
 #kind load image-archive --name "$KIND_CLUSTER_NAME" /tmp/whereabouts-img.tar
 #
-#echo "## install whereabouts"
+echo "## install whereabouts"
 #for file in "daemonset-install.yaml" "ip-reconciler-job.yaml" "whereabouts.cni.cncf.io_ippools.yaml" "whereabouts.cni.cncf.io_overlappingrangeipreservations.yaml"; do
 #  retry kubectl apply -f "$ROOT/doc/crds/$file"
 #done
-#retry kubectl wait -n kube-system --for=condition=ready -l app=whereabouts pod --timeout=$TIMEOUT_K8
+for file in "daemonset-install.yaml" "ip-reconciler-job.yaml" "whereabouts.cni.cncf.io_ippools.yaml" "whereabouts.cni.cncf.io_overlappingrangeipreservations.yaml"; do
+  retry kubectl apply -f "$ROOT/test/yaml/whereabouts/$file"
+done
+retry kubectl wait -n kube-system --for=condition=ready -l app=whereabouts pod --timeout=$TIMEOUT_K8
 echo "## done"
