@@ -42,6 +42,6 @@ jobs:
         run: go clean -testcache
 
       - name: Execute golang based E2E tests
-        run: pushd /test/e2e/ip; go test -v . ; popd
+        run: pushd test/e2e/ip; go test -v . ; popd
         env:
           KUBECONFIG: /home/sun/.kube/config
