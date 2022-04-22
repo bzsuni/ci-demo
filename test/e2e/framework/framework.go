@@ -7,20 +7,33 @@ import (
 	"context"
 	"fmt"
 	nettypes "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 	"os"
+	"time"
 
 	netclient "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/client/clientset/versioned/typed/k8s.cni.cncf.io/v1"
+)
+
+const (
+	testNetworkName = "wa-nad"
+	testNamespace   = "default"
+	testPodName     = "test-pod"
+	testImage       = "docker.io/centos:latest"
+	ipv4TestRange   = "10.10.0.0/16"
+	singlePodName   = "whereabouts-basic-test"
+	createTimeout   = 10 * time.Second
+	deleteTimeout   = 2 * createTimeout
 )
 
 type Framework struct {
 	BaseName        string
 	SystemNameSpace string
-	KubeClientSet   kubernetes.Interface
+	KubeClientSet   *kubernetes.Clientset
 	KubeConfig      *rest.Config
 	NetClientSet    netclient.K8sCniCncfIoV1Interface
 }
@@ -52,10 +65,65 @@ func NewFramework(baseName string) *Framework {
 	return f
 }
 
-func (f *Framework) addNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) (*nettypes.NetworkAttachmentDefinition, error) {
+func (f *Framework) AddNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) (*nettypes.NetworkAttachmentDefinition, error) {
 	return f.NetClientSet.NetworkAttachmentDefinitions(netattach.ObjectMeta.Namespace).Create(context.TODO(), netattach, metav1.CreateOptions{})
 }
 
-func (f *Framework) delNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) error {
+func (f *Framework) DelNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) error {
 	return f.NetClientSet.NetworkAttachmentDefinitions(netattach.ObjectMeta.Namespace).Delete(context.TODO(), netattach.Name, metav1.DeleteOptions{})
+}
+
+func (f *Framework) CreatePod(podNamespace, podName, image string, label, annotations map[string]string) (*corev1.Pod, error) {
+	pod := podObject(podNamespace, podName, image, label, annotations)
+	pod, err := f.KubeClientSet.CoreV1().Pods(pod.Namespace).Create(context.Background(), pod, metav1.CreateOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	if err := WaitForPodReady(f.KubeClientSet, pod.Namespace, pod.Name, createTimeout); err != nil {
+		return nil, err
+	}
+
+	pod, err = f.KubeClientSet.CoreV1().Pods(pod.Namespace).Get(context.Background(), pod.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	return pod, nil
+}
+
+func (f *Framework) DeletePod(pod *corev1.Pod) error {
+	if err := f.KubeClientSet.CoreV1().Pods(pod.Namespace).Delete(context.TODO(), pod.Name, metav1.DeleteOptions{}); err != nil {
+		return err
+	}
+
+	if err := WaitForPodToDisappear(f.KubeClientSet, pod.GetNamespace(), pod.GetName(), deleteTimeout); err != nil {
+		return err
+	}
+	return nil
+}
+
+func podObject(podNamespace, podName, image string, label, annotations map[string]string) *corev1.Pod {
+	return &corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        podName,
+			Namespace:   podNamespace,
+			Labels:      label,
+			Annotations: annotations,
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name:            "samplepod",
+					Command:         containerCmd(),
+					Image:           image,
+					ImagePullPolicy: "IfNotPresent",
+				},
+			},
+		},
+	}
+}
+
+func containerCmd() []string {
+	return []string{"/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"}
 }
