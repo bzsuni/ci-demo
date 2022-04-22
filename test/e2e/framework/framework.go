@@ -4,7 +4,10 @@
 package framework
 
 import (
+	"context"
 	"fmt"
+	nettypes "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -13,8 +16,6 @@ import (
 
 	netclient "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/client/clientset/versioned/typed/k8s.cni.cncf.io/v1"
 )
-
-const SpiderLabelSelector = "app.kubernetes.io/name: spiderpool"
 
 type Framework struct {
 	BaseName        string
@@ -49,4 +50,12 @@ func NewFramework(baseName string) *Framework {
 	f.NetClientSet = netClient
 
 	return f
+}
+
+func (f *Framework) addNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) (*nettypes.NetworkAttachmentDefinition, error) {
+	return f.NetClientSet.NetworkAttachmentDefinitions(netattach.ObjectMeta.Namespace).Create(context.TODO(), netattach, metav1.CreateOptions{})
+}
+
+func (f *Framework) delNetAttachDef(netattach *nettypes.NetworkAttachmentDefinition) error {
+	return f.NetClientSet.NetworkAttachmentDefinitions(netattach.ObjectMeta.Namespace).Delete(context.TODO(), netattach.Name, metav1.DeleteOptions{})
 }
