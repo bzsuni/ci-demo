@@ -10,6 +10,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 	"os"
+
+	netclient "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/client/clientset/versioned/typed/k8s.cni.cncf.io/v1"
 )
 
 const SpiderLabelSelector = "app.kubernetes.io/name: spiderpool"
@@ -19,6 +21,7 @@ type Framework struct {
 	SystemNameSpace string
 	KubeClientSet   kubernetes.Interface
 	KubeConfig      *rest.Config
+	NetClientSet    netclient.K8sCniCncfIoV1Interface
 }
 
 // NewFramework init Framework struct
@@ -38,8 +41,12 @@ func NewFramework(baseName string) *Framework {
 	if err != nil {
 		klog.Fatal(err)
 	}
-
+	netClient, err := netclient.NewForConfig(cfg)
+	if err != nil {
+		klog.Fatal(err)
+	}
 	f.KubeClientSet = kubeClient
+	f.NetClientSet = netClient
 
 	return f
 }

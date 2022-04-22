@@ -42,4 +42,4 @@ jobs:
         run: go clean -testcache
 
       - name: Execute golang based E2E tests
-        run: pushd test/e2e; go test -vv . ; popd
+        run: pushd test/e2e; go test -v . ; popd
