@@ -30,13 +30,20 @@ jobs:
           echo -e "\033[35m workspace path is `pwd` \033[0m"
 
       - name: install basic environment tool
-        run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && ./test/hack/install-basic-environment-tool.sh
+#        run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && ./test/hack/install-basic-environment-tool.sh
+         run: source ./test/hack/install-basic-environment-tool.sh
 
-      - name: install kind and kubectl
-        run: sudo chmod +x ./test/hack/install-test-tool.sh && source ./test/hack/install-test-tool.sh
+#      - name: install kind and kubectl
+#        run: sudo chmod +x ./test/hack/install-test-tool.sh && source ./test/hack/install-test-tool.sh
 
-      - name: setup kind cluster
-        run: sudo chmod +x ./test/hack/setup-kind-cluster.sh && ./test/hack/setup-kind-cluster.sh --number-of-compute $NUMBER_OF_COMPUTE_NODES
+#      - name: setup kind cluster
+#        run: sudo chmod +x ./test/hack/setup-kind-cluster.sh && ./test/hack/setup-kind-cluster.sh --number-of-compute $NUMBER_OF_COMPUTE_NODES
+
+      - name: Init Kind Cluster
+        run: |
+          pushd ./test
+          make kind-init INSTALL_MACVLAN=true SINGE_NODE=false
+          popd
 
       - name: Clear test-cache
         run: go clean -testcache
