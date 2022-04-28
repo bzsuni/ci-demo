@@ -37,7 +37,7 @@ jobs:
 
       - name: install basic environment tool
 #        run: sudo chmod +x ./test/hack/install-basic-environment-tool.sh && ./test/hack/install-basic-environment-tool.sh
-         run: source ./test/hack/install-basic-environment-tool.sh
+        run: source ./test/hack/install-basic-environment-tool.sh
 
 #      - name: install kind and kubectl
 #        run: sudo chmod +x ./test/hack/install-test-tool.sh && source ./test/hack/install-test-tool.sh
