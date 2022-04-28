@@ -6,6 +6,12 @@ on:
   pull_request: 
     branches: [ main ]
 
+env:
+  KIND_VERSION: v0.12.0
+  IMAGE_TAG: latest
+  ONLINE_REGISTER: ghcr.io
+  CLUSTER_NAME: spider
+
 jobs:
   test:
     runs-on: self-hosted
@@ -45,8 +51,8 @@ jobs:
           make kind-init INSTALL_MACVLAN=true SINGE_NODE=false
           popd
 
-      - name: Clear test-cache
-        run: go clean -testcache
-
-      - name: Execute golang based E2E tests
-        run: pushd test/e2e; go test -v . ; popd
+#      - name: Clear test-cache
+#        run: go clean -testcache
+#
+#      - name: Execute golang based E2E tests
+#        run: pushd test/e2e; go test -v . ; popd
