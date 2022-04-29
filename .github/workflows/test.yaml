@@ -47,6 +47,7 @@ jobs:
 
       - name: Init Kind Cluster
         run: |
+          echo $PATH
           pushd ./test
           make kind-init INSTALL_MACVLAN=true SINGE_NODE=false
           popd
