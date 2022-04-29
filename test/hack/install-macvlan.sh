@@ -22,7 +22,8 @@ fi
 kind load docker-image ghcr.io/k8snetworkplumbingwg/whereabouts:latest-amd64 --name $CLUSTER_NAME
 
 # Install whereabouts
-export PATH=$PATH:/usr/local/git
+export PATH=$PATH:/usr/local/git/bin
+echo $PATH
 git -C /tmp clone https://github.com/k8snetworkplumbingwg/whereabouts
 if [ -d "/tmp/whereabouts" ]; then
   kubectl apply \
