@@ -6,14 +6,15 @@ package framework
 import (
 	"context"
 	"fmt"
+	"os"
+	"time"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
-	"os"
-	"time"
 )
 
 const (
@@ -99,5 +100,5 @@ func podObject(podNamespace, podName, image string) *corev1.Pod {
 }
 
 func containerCmd() []string {
-	return []string{"/bin/bash", "-c", "trap : TERM INT; sleep infinity & wait"}
+	return []string{"/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"}
 }
