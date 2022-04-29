@@ -7,8 +7,8 @@ echo "CLUSTER_NAME: $CLUSTER_NAME"
 NODES=($(docker ps | grep $CLUSTER_NAME | awk '{print $1}'))
 for node in ${NODES[@]}
 do
-  echo "docker cp $(pwd)/../tools/yamls/10-macvlan.conflist $node:/etc/cni/net.d"
-  docker cp ../yaml/macvlan/10-macvlan.conflist $node:/etc/cni/net.d
+  echo "docker cp $(pwd)/yaml/macvlan/10-macvlan.conflist $node:/etc/cni/net.d"
+  docker cp $(pwd)/yaml/macvlan/10-macvlan.conflist $node:/etc/cni/net.d
 done
 
 sleep 5
