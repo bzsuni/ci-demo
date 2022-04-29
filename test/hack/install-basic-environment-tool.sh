@@ -72,6 +72,7 @@ else
   sudo echo -e 'export PATH=$PATH:/usr/local/git/bin' >> $HOME/.bashrc
   sudo yum -y remove git
   source $HOME/.bashrc
+  sudo ln -s /usr/local/git/bin/git /usr/local/bin/git
   if [[ $(git version | cut -d " " -f 3) != "2.30.1" ]]; then
     err "failed install git 2.30.1"
     exit 1
