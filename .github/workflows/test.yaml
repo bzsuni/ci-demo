@@ -57,5 +57,5 @@ jobs:
       - name: Run e2e
         run: |
           pushd ./test
-          make e2e-test
+          go test -v .
           popd
